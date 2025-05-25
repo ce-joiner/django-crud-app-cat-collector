@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Cat
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # Import HttpResponse to send text-based responses
 # from django.http import HttpResponse
 
@@ -32,3 +33,14 @@ def about(request):
 def cat_index(request):
     cats = Cat.objects.all() # Get all Cat objects from the database
     return render(request, 'cats/index.html', {'cats': cats}) # Render the index.html template with the list of cats
+
+# Define the cat_detail view function
+def cat_detail(request, cat_id):
+    cat = Cat.objects.get(id=cat_id) # Get the Cat object with the specified ID
+    return render(request, 'cats/detail.html', {'cat': cat}) # Render the detail.html template with the selected cat
+
+# Define the CatCreate view class
+class CatCreate(CreateView):
+    model = Cat
+    fields = '__all__'
+    # success_url = '/cats/'  # Redirect to the cat index page after creation
