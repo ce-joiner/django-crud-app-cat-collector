@@ -44,3 +44,13 @@ class CatCreate(CreateView):
     model = Cat
     fields = '__all__'
     # success_url = '/cats/'  # Redirect to the cat index page after creation
+
+class CatUpdate(UpdateView):
+    model = Cat
+    #disallow the renaming of a cat by excluding the name field
+    fields = ['breed', 'description', 'age']  
+
+class CatDelete(DeleteView):
+    model = Cat
+    success_url = '/cats/'  # Redirect to the cat index page after deletion
+    # The success_url is the URL to redirect to after a successful delete operation
