@@ -39,13 +39,17 @@ def cat_index(request):
 # Define the cat_detail view function
 def cat_detail(request, cat_id):
     cat = Cat.objects.get(id=cat_id) # Get the Cat object with the specified ID
+    toys = Toy.objects.all()  # Fetch all toys
     feeding_form = FeedingForm() # Create an instance of the FeedingForm
-    return render(request, 'cats/detail.html', {'cat': cat, 'feeding_form': feeding_form}) # Render the detail.html template with the selected cat
+    return render(request, 'cats/detail.html', {
+        'cat': cat, 
+        'feeding_form': feeding_form, 
+        'toys': toys})  # Pass toys to the template}) # Render the detail.html template with the selected cat
 
 # Define the CatCreate view class
 class CatCreate(CreateView):
     model = Cat
-    fields = '__all__'
+    fields = ['name', 'breed', 'description', 'age']
     # success_url = '/cats/'  # Redirect to the cat index page after creation
 
 class CatUpdate(UpdateView):
@@ -85,3 +89,18 @@ class ToyDetail(DetailView):
 class ToyList(ListView):
     model = Toy
     
+# Define the ToyUpdate view class
+class ToyUpdate(UpdateView):
+    model = Toy
+    fields = ['name', 'color']
+
+# Define the ToyDelete view class
+class ToyDelete(DeleteView):
+    model = Toy
+    success_url = '/toys/'  # Redirect to the toy index page after deletion
+
+# Define the associate_toy view function
+def associate_toy(request, cat_id, toy_id):
+    # Note that you can pass a toy's id instead of the whole object
+    Cat.objects.get(id=cat_id).toys.add(toy_id)
+    return redirect('cat-detail', cat_id=cat_id)
