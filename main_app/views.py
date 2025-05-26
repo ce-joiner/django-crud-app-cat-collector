@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Cat
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .forms import FeedingForm
 # Import HttpResponse to send text-based responses
 # from django.http import HttpResponse
 
@@ -37,7 +38,8 @@ def cat_index(request):
 # Define the cat_detail view function
 def cat_detail(request, cat_id):
     cat = Cat.objects.get(id=cat_id) # Get the Cat object with the specified ID
-    return render(request, 'cats/detail.html', {'cat': cat}) # Render the detail.html template with the selected cat
+    feeding_form = FeedingForm() # Create an instance of the FeedingForm
+    return render(request, 'cats/detail.html', {'cat': cat, 'feeding_form': feeding_form}) # Render the detail.html template with the selected cat
 
 # Define the CatCreate view class
 class CatCreate(CreateView):
