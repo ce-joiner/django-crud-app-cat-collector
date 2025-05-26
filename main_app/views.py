@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from .models import Cat
+from django.shortcuts import render, redirect
+from .models import Cat, Toy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import FeedingForm
+from django.views.generic import ListView, DetailView
 # Import HttpResponse to send text-based responses
 # from django.http import HttpResponse
 
@@ -56,3 +57,31 @@ class CatDelete(DeleteView):
     model = Cat
     success_url = '/cats/'  # Redirect to the cat index page after deletion
     # The success_url is the URL to redirect to after a successful delete operation
+
+# Define the add_feeding view function
+def add_feeding(request, cat_id):
+    # create a ModelForm instance using the data in request.POST
+    form = FeedingForm(request.POST)
+    # validate the form
+    if form.is_valid():
+        # don't save the form to the db until it
+        # has the cat_id assigned
+        new_feeding = form.save(commit=False)
+        new_feeding.cat_id = cat_id
+        new_feeding.save()
+    return redirect('cat-detail', cat_id=cat_id)
+
+# Define the ToyCreate view class
+class ToyCreate(CreateView):
+    model = Toy
+    fields = '__all__'
+    success_url = '/toys/'  # Redirect to the toy index page after creation
+
+# Define the ToyDetail view class
+class ToyDetail(DetailView):
+    model = Toy
+    
+# Define the ToyList view class
+class ToyList(ListView):
+    model = Toy
+    
