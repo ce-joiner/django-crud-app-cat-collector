@@ -39,12 +39,18 @@ def cat_index(request):
 # Define the cat_detail view function
 def cat_detail(request, cat_id):
     cat = Cat.objects.get(id=cat_id) # Get the Cat object with the specified ID
-    toys = Toy.objects.all()  # Fetch all toys
+    # Only get the toys the cat does not have
+    toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
+
+    # toys = Toy.objects.all()  # Fetch all toys
     feeding_form = FeedingForm() # Create an instance of the FeedingForm
     return render(request, 'cats/detail.html', {
         'cat': cat, 
         'feeding_form': feeding_form, 
-        'toys': toys})  # Pass toys to the template}) # Render the detail.html template with the selected cat
+            # send those toys  
+        'toys': toys_cat_doesnt_have 
+    })
+            # send those toys  
 
 # Define the CatCreate view class
 class CatCreate(CreateView):
@@ -103,4 +109,9 @@ class ToyDelete(DeleteView):
 def associate_toy(request, cat_id, toy_id):
     # Note that you can pass a toy's id instead of the whole object
     Cat.objects.get(id=cat_id).toys.add(toy_id)
+    return redirect('cat-detail', cat_id=cat_id)
+
+# Define the remove_toy view function
+def remove_toy(request, cat_id, toy_id):
+    Cat.objects.get(id=cat_id).toys.remove(toy_id)
     return redirect('cat-detail', cat_id=cat_id)
