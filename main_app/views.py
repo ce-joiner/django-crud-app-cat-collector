@@ -3,6 +3,8 @@ from .models import Cat, Toy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import FeedingForm
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.views import LoginView
+
 # Import HttpResponse to send text-based responses
 # from django.http import HttpResponse
 
@@ -115,3 +117,7 @@ def associate_toy(request, cat_id, toy_id):
 def remove_toy(request, cat_id, toy_id):
     Cat.objects.get(id=cat_id).toys.remove(toy_id)
     return redirect('cat-detail', cat_id=cat_id)
+
+
+class Home(LoginView):
+    template_name = 'home.html'
