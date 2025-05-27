@@ -128,6 +128,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Add this variable to specify where decorators and mixins should redirect to
+LOGIN_URL = 'home'
+
 # Add this variable to specify where successful logins should redirect to
 LOGIN_REDIRECT_URL = 'cat-index'
 
