@@ -17,6 +17,7 @@
     alt="Text reads: Cat Collector"
   />
 </section>
+{% if not user.is_authenticated %}
 <section>
   <form action="{% url 'home' %}" method="post" class="login">
     <h1>Login</h1>
@@ -25,5 +26,6 @@
     <button type="submit" class="btn submit">Login</button>
   </form>
 </section>
+{% endif %}
 
 {% endblock %}
